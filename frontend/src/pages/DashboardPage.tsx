@@ -5,6 +5,7 @@ import { MovieCard } from '../components/MovieCard';
 import { getSpaces, createSpace, addMovieToSpace, removeMovieFromSpace, getPersonalMovies, addMovieToPersonal, removeMovieFromPersonal, logout, addMemberToSpace, getPendingInvitations, acceptInvitation, rejectInvitation, Invitation } from '../services/api.service';
 import { Space, Movie } from '../types';
 import { searchMovies } from '../services/tmdb.service';
+import { useDebouncedMovieSearch } from '../hooks/useMovieSearch';
 
 interface DashboardPageProps {
     user: any;
@@ -20,7 +21,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
     const [activeTab, setActiveTab] = useState<'spaces' | 'personal'>('personal');
     const [newSpaceName, setNewSpaceName] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState<Movie[]>([]);
+    const { results: searchResults, isLoading: isSearching } = useDebouncedMovieSearch(searchQuery);
     const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
     const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(null);
     const [inviteEmail, setInviteEmail] = useState('');
@@ -90,17 +91,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
         }
     };
 
-    const handleSearch = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!searchQuery.trim()) return;
-        try {
-            const results = await searchMovies(searchQuery);
-            setSearchResults(results);
-        } catch (error) {
-            console.error('Search failed:', error);
-        }
-    };
-
     const handleAddMovie = async (movie: Movie) => {
         try {
             if (activeTab === 'spaces' && selectedSpaceId) {
@@ -111,7 +101,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                 await addMovieToPersonal(user.id, movie);
                 setPersonalMovies([...personalMovies, movie]);
             }
-            setSearchResults([]);
             setSearchQuery('');
         } catch (error) {
             console.error('Failed to add movie:', error);
@@ -279,7 +268,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                     <h3 className="text-xl mb-4 uppercase font-bold flex items-center gap-2">
                                         <span className="text-red-600">+</span> Add Movie to Space
                                     </h3>
-                                    <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+                                    <div className="flex flex-col sm:flex-row gap-3">
                                         <input
                                             type="text"
                                             value={searchQuery}
@@ -287,8 +276,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                             placeholder="Search TMDB..."
                                             className="retro-input mb-0 flex-grow"
                                         />
-                                        <Button type="submit" className="w-full sm:w-auto">Search</Button>
-                                    </form>
+                                    </div>
+
+                                    {isSearching && (
+                                        <div className="mt-4 text-center font-bold text-gray-500 animate-pulse">
+                                            Searching movies...
+                                        </div>
+                                    )}
 
                                     {searchResults.length > 0 && (
                                         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -338,7 +332,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                             <h3 className="text-xl mb-4 uppercase font-bold flex items-center gap-2">
                                 <span className="text-red-600">+</span> Add to Watchlist
                             </h3>
-                            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+                            <div className="flex flex-col sm:flex-row gap-3">
                                 <input
                                     type="text"
                                     value={searchQuery}
@@ -346,8 +340,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                     placeholder="Search TMDB..."
                                     className="retro-input mb-0 flex-grow"
                                 />
-                                <Button type="submit" className="w-full sm:w-auto">Search</Button>
-                            </form>
+                            </div>
+
+                            {isSearching && (
+                                <div className="mt-4 text-center font-bold text-gray-500 animate-pulse">
+                                    Searching movies...
+                                </div>
+                            )}
 
                             {searchResults.length > 0 && (
                                 <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
