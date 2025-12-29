@@ -1,0 +1,5 @@
+{
+  "name": "CineSync",
+  "description": "A collaborative movie watchlist platform where friends can create shared spaces to curate movie nights together. Features smart search powered by Gemini.",
+  "requestFramePermissions": []
+}
