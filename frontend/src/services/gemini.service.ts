@@ -2,8 +2,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Movie } from "../types";
 
 // Initialize Gemini Client
-// We assume process.env.API_KEY is available in this environment
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Initialize Gemini Client
+// We assume import.meta.env.VITE_GEMINI_API_KEY is available in this environment
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 // Enhanced Schema for "Proper" Movie Data
 const movieSchema = {
