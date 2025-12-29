@@ -1,4 +1,3 @@
-
 # CineSync - Movie Tracking & Recommendation App
 
 A full-stack application for tracking movies, creating shared spaces with friends, and getting AI-powered recommendations using Google Gemini.
@@ -8,6 +7,7 @@ A full-stack application for tracking movies, creating shared spaces with friend
 **Frontend:**
 - React + TypeScript
 - Vite
+- Tailwind CSS
 - Lucide Icons
 - Google Gemini AI
 
@@ -21,25 +21,12 @@ A full-stack application for tracking movies, creating shared spaces with friend
 
 - Node.js (v18 or higher)
 - MongoDB (local installation or MongoDB Atlas account)
-- Gemini API Key
+- Gemini API Key (for AI features)
+- TMDB API Key (for movie data)
 
 ## Setup Instructions
 
-### 1. MongoDB Setup
-
-**Option A: Local MongoDB**
-1. Install MongoDB Community Edition from [mongodb.com](https://www.mongodb.com/try/download/community)
-2. Start MongoDB service:
-   ```bash
-   mongod
-   ```
-
-**Option B: MongoDB Atlas (Cloud)**
-1. Create a free account at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a cluster and get your connection string
-3. Whitelist your IP address
-
-### 2. Backend Setup
+### 1. Backend Setup
 
 1. Navigate to backend folder:
    ```bash
@@ -61,16 +48,16 @@ A full-stack application for tracking movies, creating shared spaces with friend
    PORT=5000
    NODE_ENV=development
    MONGODB_URI=mongodb://localhost:27017/cinesync  # or your Atlas connection string
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+   JWT_SECRET=your-super-secret-jwt-key
    JWT_EXPIRES_IN=7d
    FRONTEND_URL=http://localhost:5173
    ```
 
-### 3. Frontend Setup
+### 2. Frontend Setup
 
-1. Navigate back to root folder:
+1. Navigate to frontend folder:
    ```bash
-   cd ..
+   cd frontend
    ```
 
 2. Install dependencies:
@@ -78,15 +65,15 @@ A full-stack application for tracking movies, creating shared spaces with friend
    npm install
    ```
 
-3. Create `.env.local` file (copy from `.env.example`):
+3. Create `.env` (or `.env.local`) file:
    ```bash
-   cp .env.example .env.local
+   cp .env.example .env
    ```
 
-4. Configure your `.env.local` file:
+4. Configure your environment variables:
    ```env
    # Gemini API Key for AI recommendations
-   API_KEY=your-gemini-api-key
+   VITE_GEMINI_API_KEY=your-gemini-api-key
    
    # TMDB API Key for movie search and posters
    # Get your free API key at: https://www.themoviedb.org/settings/api
@@ -96,14 +83,11 @@ A full-stack application for tracking movies, creating shared spaces with friend
    VITE_API_URL=http://localhost:5000/api
    ```
 
-   **Getting API Keys:**
-   - **Gemini API**: Get from [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - **TMDB API**: Sign up at [TMDB](https://www.themoviedb.org/signup), then go to Settings → API to request a free API key
-
 ## Running the Application
 
-### Run Both Frontend and Backend Together (Recommended)
+### Run Both Frontend and Backend (Recommended)
 
+From the **root** directory:
 ```bash
 npm run dev:all
 ```
@@ -112,27 +96,19 @@ This will start:
 - Frontend on `http://localhost:5173`
 - Backend on `http://localhost:5000`
 
-### Run Separately
+## Deployment
 
-**Backend only:**
-```bash
-npm run dev:backend
-```
+We recommend deploying the **Backend to Render** and the **Frontend to Vercel**.
 
-**Frontend only:**
-```bash
-npm run dev
-```
+### Backend (Render)
+- **Build Command:** `npm install --include=dev && npm run build`
+- **Start Command:** `npm start`
+- **Env Vars:** `NODE_ENV=production`, `MONGODB_URI`, `JWT_SECRET`, `FRONTEND_URL` (your Vercel URL).
 
-## Features
-
-- 🔐 User authentication with password encryption (bcrypt)
-- 🎬 Search movies using TMDB API (real movie posters and data)
-- 📝 Personal movie watchlists
-- 👥 Shared spaces with invitation system
-- 🤖 AI-powered movie recommendations (Google Gemini)
-- 💾 Real MongoDB database with Mongoose ODM
-- 🔒 JWT-based authentication with secure token management
+### Frontend (Vercel)
+- **Framework:** Vite
+- **Root Directory:** `frontend`
+- **Env Vars:** `VITE_API_URL` (your Render URL), `VITE_TMDB_API_KEY`, `VITE_GEMINI_API_KEY`.
 
 ## Project Structure
 
@@ -145,43 +121,29 @@ cinesync/
 │   │   ├── middleware/     # Auth & error middleware
 │   │   ├── models/         # Mongoose models
 │   │   ├── routes/         # API routes
-│   │   ├── types/          # TypeScript types
 │   │   └── server.ts       # Main server file
-│   ├── package.json
-│   └── tsconfig.json
-├── src/                    # React frontend
-│   ├── components/         # React components
-│   ├── services/           # API & Gemini services
-│   ├── types.ts            # TypeScript types
-│   └── App.tsx             # Main App component
-├── index.html
-├── index.tsx
-└── package.json
-
+│   └── package.json
+├── frontend/                # React frontend
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── hooks/          # Custom hooks
+│   │   ├── pages/          # Page components
+│   │   ├── services/       # API services
+│   │   └── App.tsx         # Main App component
+│   └── package.json
+├── package.json            # Root orchestration
+└── README.md
 ```
 
-## API Endpoints
+## Features
 
-See [backend/README.md](backend/README.md) for detailed API documentation.
-
-## Development
-
-The application uses hot-reloading for both frontend and backend during development. Any changes will automatically refresh.
-
-## Building for Production
-
-**Frontend:**
-```bash
-npm run build
-```
-
-**Backend:**
-```bash
-cd backend
-npm run build
-```
+- **Secure Auth:** JWT-based authentication with password encryption.
+- **Movie Search:** Real-time search using TMDB API with debouncing and caching.
+- **Watchlists:** Manage your personal movie list.
+- **Shared Spaces:** Create spaces, invite friends, and manage movies together.
+- **AI Recommendations:** Get personalized movie suggestions powered by Google Gemini.
+- **Responsive Design:** Fully responsive UI with a retro-modern aesthetic.
 
 ## License
 
 ISC
-

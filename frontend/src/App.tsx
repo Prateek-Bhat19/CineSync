@@ -115,7 +115,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col" style={{ minHeight: '100vh' }}>
       <header className="bg-white text-black p-4 border-b-4 border-black sticky top-0 z-50 shadow-retro">
         <div className="container flex justify-between items-center">
           <div

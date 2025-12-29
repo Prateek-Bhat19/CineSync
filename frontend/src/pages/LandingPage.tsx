@@ -12,7 +12,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             {/* Hero Section */}
             <section
                 style={{
-                    minHeight: "100vh",
+                    minHeight: "calc(100vh - 72px)",
                     backgroundColor: "#f6e8c3",
                     borderBottom: "4px solid black",
                     display: "flex",
@@ -107,8 +107,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
                     {/* RIGHT — POSTER ARTIFACT */}
                     <div
+                        className="hidden md:flex"
                         style={{
-                            display: "flex",
                             justifyContent: "center",
                         }}
                     >
@@ -165,42 +165,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
 
             {/* What We Do Section */}
-            <section className="pt-24 pb-45 px-6 bg-white border-b-4 border-black mb-24">
+            <section className="pt-24 pb-48 px-6 bg-white border-b-4 border-black">
                 <div className="container mx-auto">
                     <div className="text-center mb-20">
-                        <h2 className="text-5xl md:text-6xl font-black uppercase mb-6 inline-block border-b-8 border-yellow-400">What We Do</h2>
-                        <p className="text-2xl font-bold text-gray-600 mt-4">Bring the cinema experience to your screen</p>
+                        <h2 className="text-5xl font-black uppercase mb-6 inline-block border-b-8 border-yellow-400">
+                            What We Do
+                        </h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
                         {/* Feature 1 */}
-                        <div className="retro-card bg-blue-50 hover:bg-blue-100 transition-colors group p-8">
-                            <div className="bg-blue-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8 group-hover:scale-110 transition-transform">
+                        <div className="retro-card bg-blue-50 p-8">
+                            <div className="bg-blue-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8">
                                 <Users size={40} className="text-white" />
                             </div>
-                            <h3 className="text-3xl font-black uppercase mb-4">Create Spaces</h3>
+                            <h3 className="text-3xl font-black uppercase mb-4">
+                                Create Spaces
+                            </h3>
                             <p className="text-lg font-medium leading-relaxed text-gray-800">
                                 Create dedicated spaces for your friend groups. It's like a digital living room for your movie marathons.
                             </p>
                         </div>
 
                         {/* Feature 2 */}
-                        <div className="retro-card bg-red-50 hover:bg-red-100 transition-colors group transform md:-translate-y-8 p-8">
-                            <div className="bg-red-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8 group-hover:scale-110 transition-transform">
+                        <div className="retro-card bg-red-50 p-8">
+                            <div className="bg-red-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8">
                                 <Share2 size={40} className="text-white" />
                             </div>
-                            <h3 className="text-3xl font-black uppercase mb-4">Invite Friends</h3>
+                            <h3 className="text-3xl font-black uppercase mb-4">
+                                Invite Friends
+                            </h3>
                             <p className="text-lg font-medium leading-relaxed text-gray-800">
                                 Send retro-style email invitations. No complicated links, just a simple ticket to the show.
                             </p>
                         </div>
 
                         {/* Feature 3 */}
-                        <div className="retro-card bg-yellow-50 hover:bg-yellow-100 transition-colors group p-8">
-                            <div className="bg-yellow-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8 group-hover:scale-110 transition-transform">
+                        <div className="retro-card bg-yellow-50 p-8">
+                            <div className="bg-yellow-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8">
                                 <List size={40} className="text-white" />
                             </div>
-                            <h3 className="text-3xl font-black uppercase mb-4">Curate Watchlists</h3>
+                            <h3 className="text-3xl font-black uppercase mb-4">
+                                Curate Watchlists
+                            </h3>
                             <p className="text-lg font-medium leading-relaxed text-gray-800">
                                 Build the ultimate collaborative watchlist. Vote on what to watch next and never argue about movies again.
                             </p>
