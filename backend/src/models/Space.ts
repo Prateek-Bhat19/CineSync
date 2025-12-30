@@ -14,8 +14,9 @@ const movieSchema = new Schema({
   id: { type: String, required: true },
   title: { type: String, required: true },
   year: { type: String, required: true },
+  tmdbId: { type: Number }, // Added for enrichment
   genre: [{ type: String }],
-  plot: { type: String, required: true },
+  plot: { type: String, required: false },
   posterUrl: { type: String },
   rating: { type: String },
   director: { type: String },

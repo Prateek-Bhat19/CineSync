@@ -10,5 +10,6 @@ router.use(authenticate);
 router.get('/personal', movieController.getPersonalMovies);
 router.post('/personal', movieController.addPersonalMovie);
 router.delete('/personal/:movieId', movieController.removePersonalMovie);
+router.put('/personal/:movieId', movieController.updatePersonalMovie);
 
 export default router;

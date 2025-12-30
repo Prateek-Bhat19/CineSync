@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js';
 import spaceRoutes from './routes/space.routes.js';
 import movieRoutes from './routes/movie.routes.js';
 import invitationRoutes from './routes/invitation.routes.js';
+import videoExtractionRoutes from './routes/video-extraction.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -49,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/spaces', spaceRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/invitations', invitationRoutes);
+app.use('/api/video-extraction', videoExtractionRoutes);
 
 // Error handling
 app.use(notFoundHandler);
@@ -62,9 +64,9 @@ const startServer = async () => {
     
     // Start listening
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`📡 API available at http://localhost:${PORT}/api`);
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`API available at http://localhost:${PORT}/api`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

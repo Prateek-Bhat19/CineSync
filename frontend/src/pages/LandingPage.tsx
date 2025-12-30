@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../components/Button';
-import { Users, List, Share2 } from 'lucide-react';
+import { Users, List, Share2, Clapperboard } from 'lucide-react';
 
 interface LandingPageProps {
     onNavigate: (page: string) => void;
@@ -125,37 +125,50 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                                 justifyContent: "space-between",
                             }}
                         >
-                            <div
-                                style={{
-                                    padding: "16px",
-                                    fontSize: "14px",
-                                    letterSpacing: "0.2em",
-                                    textAlign: "center",
-                                }}
-                            >
-                                NOW SHOWING
-                            </div>
-
-                            <div
-                                style={{
-                                    textAlign: "center",
-                                    fontSize: "2rem",
-                                    fontWeight: 900,
-                                }}
-                            >
-                                CINESYNC
-                            </div>
-
-                            <div
-                                style={{
-                                    backgroundColor: "#d62828",
-                                    textAlign: "center",
-                                    padding: "12px",
-                                    fontWeight: 700,
-                                    letterSpacing: "0.1em",
-                                }}
-                            >
-                                EST. 2025
+                            <div className="relative w-full h-full">
+                                <img
+                                    src="/hero-poster-final.jpg"
+                                    alt="Now Showing"
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        display: "block"
+                                    }}
+                                />
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "16px",
+                                        left: 0,
+                                        right: 0,
+                                        textAlign: "center",
+                                        fontSize: "14px",
+                                        letterSpacing: "0.2em",
+                                        color: "white",
+                                        textShadow: "2px 2px 0 black",
+                                        fontWeight: 900
+                                    }}
+                                >
+                                    NOW SHOWING
+                                </div>
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        bottom: "0",
+                                        left: 0,
+                                        right: 0,
+                                        backgroundColor: "#d62828",
+                                        textAlign: "center",
+                                        padding: "12px",
+                                        fontWeight: 700,
+                                        letterSpacing: "0.1em",
+                                        color: "white",
+                                        borderTop: "3px solid black"
+                                    }}
+                                >
+                                    EST. 2025
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,7 +186,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 max-w-[1400px] mx-auto">
                         {/* Feature 1 */}
                         <div className="retro-card bg-blue-50 p-8">
                             <div className="bg-blue-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8">
@@ -210,6 +223,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                             </h3>
                             <p className="text-lg font-medium leading-relaxed text-gray-800">
                                 Build the ultimate collaborative watchlist. Vote on what to watch next and never argue about movies again.
+                            </p>
+                        </div>
+
+                        {/* Feature 4 */}
+                        <div className="retro-card bg-green-50 p-8">
+                            <div className="bg-green-500 w-20 h-20 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8">
+                                <Clapperboard size={40} className="text-white" />
+                            </div>
+                            <h3 className="text-3xl font-black uppercase mb-4">
+                                AI Video Extraction
+                            </h3>
+                            <p className="text-lg font-medium leading-relaxed text-gray-800">
+                                Saw a movie in a reel but forgot the name? Paste the link, and our AI will find and add it to your list instantly.
                             </p>
                         </div>
                     </div>

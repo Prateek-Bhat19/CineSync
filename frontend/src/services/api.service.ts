@@ -123,6 +123,13 @@ export const removeMovieFromSpace = async (spaceId: string, movieId: string): Pr
   });
 };
 
+export const updateMovieInSpace = async (spaceId: string, movieId: string, updates: Partial<Movie>): Promise<void> => {
+  await apiClient(`/spaces/${spaceId}/movies/${movieId}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  });
+};
+
 // --- Invitation API ---
 
 export interface Invitation {
@@ -171,5 +178,12 @@ export const addMovieToPersonal = async (userId: string, movie: Movie): Promise<
 export const removeMovieFromPersonal = async (userId: string, movieId: string): Promise<void> => {
   await apiClient(`/movies/personal/${movieId}`, {
     method: 'DELETE',
+  });
+};
+
+export const updatePersonalMovie = async (userId: string, movieId: string, updates: Partial<Movie>): Promise<void> => {
+  await apiClient(`/movies/personal/${movieId}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
   });
 };

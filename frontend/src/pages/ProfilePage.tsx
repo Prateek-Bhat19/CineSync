@@ -11,7 +11,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user, onNavigate }) =>
         <div className="container min-h-screen py-12">
             <div className="retro-card max-w-2xl mx-auto">
                 <div className="flex items-center gap-4 mb-8 border-b-4 border-black pb-4">
-                    <Button variant="secondary" onClick={() => onNavigate('dashboard')} size="sm">&larr; Back</Button>
+                    <Button variant="secondary" onClick={() => onNavigate('dashboard')} >&larr; Back</Button>
                     <h2 className="text-3xl font-bold uppercase">User Profile</h2>
                 </div>
 

@@ -12,5 +12,6 @@ router.post('/', spaceController.createSpace);
 router.post('/:spaceId/members', spaceController.addMember);
 router.post('/:spaceId/movies', spaceController.addMovie);
 router.delete('/:spaceId/movies/:movieId', spaceController.removeMovie);
+router.put('/:spaceId/movies/:movieId', spaceController.updateMovieInSpace);
 
 export default router;

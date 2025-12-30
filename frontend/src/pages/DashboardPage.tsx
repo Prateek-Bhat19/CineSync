@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
 import { MovieCard } from '../components/MovieCard';
+import { Plus } from 'lucide-react';
+
 
 import { getSpaces, createSpace, addMovieToSpace, removeMovieFromSpace, getPersonalMovies, addMovieToPersonal, removeMovieFromPersonal, logout, addMemberToSpace, getPendingInvitations, acceptInvitation, rejectInvitation, Invitation } from '../services/api.service';
 import { Space, Movie } from '../types';
 import { searchMovies } from '../services/tmdb.service';
 import { useDebouncedMovieSearch } from '../hooks/useMovieSearch';
+import VideoExtractor from '../components/VideoExtractor';
 
 interface DashboardPageProps {
     user: any;
@@ -15,10 +18,11 @@ interface DashboardPageProps {
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, onMovieSelect }) => {
     console.log('DashboardPage rendered');
+
     const [spaces, setSpaces] = useState<Space[]>([]);
     const [invitations, setInvitations] = useState<Invitation[]>([]);
     const [personalMovies, setPersonalMovies] = useState<Movie[]>([]);
-    const [activeTab, setActiveTab] = useState<'spaces' | 'personal'>('personal');
+    const [activeTab, setActiveTab] = useState<'spaces' | 'personal' | 'extractor'>('personal');
     const [newSpaceName, setNewSpaceName] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const { results: searchResults, isLoading: isSearching } = useDebouncedMovieSearch(searchQuery);
@@ -141,7 +145,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
 
             <div className="container">
                 {/* Tabs */}
-                <div className="flex mt-12 justify-center gap-8 mb-10 border-b-2 border-gray-300 pb-1">
+                <div className="flex mt-12 justify-center gap-8 mb-10 border-b-2 border-gray-300 pb-1 items-end">
                     <button
                         className={`text-xl md:text-2xl uppercase font-bold px-6 py-2 transition-all ${activeTab === 'spaces' ? 'text-red-600 border-b-4 border-red-600 -mb-2' : 'text-gray-400 hover:text-black'}`}
                         onClick={() => { setActiveTab('spaces'); setViewMode('list'); }}
@@ -154,7 +158,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                     >
                         My Watchlist
                     </button>
+                    <button
+                        className={`text-xl md:text-2xl uppercase font-bold px-6 py-2 transition-all ${activeTab === 'extractor' ? 'text-red-600 border-b-4 border-red-600 -mb-2' : 'text-gray-400 hover:text-black'}`}
+                        onClick={() => setActiveTab('extractor')}
+                    >
+                        Extract from Video
+                    </button>
                 </div>
+
+                {/* Extractor Tab */}
+                {activeTab === 'extractor' && (
+                    <VideoExtractor
+                        spaces={spaces}
+                        onSuccess={() => {
+                            loadData();
+                            setActiveTab('personal'); // Auto-switch to list to see result, or stay. User preference? Let's stay or go to personal.
+                        }}
+                    />
+                )}
 
                 {/* Spaces Tab */}
                 {activeTab === 'spaces' && (
@@ -174,8 +195,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                                         <p className="text-sm text-gray-700">Invited by <span className="font-bold">{invitation.invitedBy.username}</span></p>
                                                     </div>
                                                     <div className="flex gap-2">
-                                                        <Button onClick={() => handleAcceptInvitation(invitation.id)} size="sm" className="bg-green-500 text-white border-black hover:bg-green-600">Accept</Button>
-                                                        <Button onClick={() => handleRejectInvitation(invitation.id)} size="sm" variant="secondary" className="bg-red-500 text-white border-black hover:bg-red-600">Reject</Button>
+                                                        <Button onClick={() => handleAcceptInvitation(invitation.id)} className="bg-green-500 text-white border-black hover:bg-green-600">Accept</Button>
+                                                        <Button onClick={() => handleRejectInvitation(invitation.id)} variant="secondary" className="bg-red-500 text-white border-black hover:bg-red-600">Reject</Button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -229,7 +250,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                             <div>
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                                     <div className="flex items-center gap-4">
-                                        <Button variant="secondary" onClick={handleBackToSpaces} size="sm">&larr; Back</Button>
+                                        <Button variant="secondary" onClick={handleBackToSpaces} >&larr; Back</Button>
                                         <h2 className="text-3xl md:text-4xl font-bold uppercase border-l-4 border-red-600 pl-4">
                                             {currentSpace?.name}
                                         </h2>
@@ -237,7 +258,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
 
                                     <div className="relative">
                                         {!showInviteForm ? (
-                                            <Button onClick={() => setShowInviteForm(true)} size="sm" className="bg-blue-500 text-white border-black">
+                                            <Button onClick={() => setShowInviteForm(true)} className="bg-blue-500 text-white border-black">
                                                 + Invite Member
                                             </Button>
                                         ) : (
@@ -250,7 +271,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                                     className="retro-input mb-0 py-1 px-2 text-sm w-48"
                                                     autoFocus
                                                 />
-                                                <Button type="submit" size="sm">Send</Button>
+                                                <Button type="submit" >Send</Button>
                                                 <button
                                                     type="button"
                                                     onClick={() => setShowInviteForm(false)}
@@ -313,7 +334,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                                     movie={movie}
                                                     actionType="remove"
                                                     onAction={(e) => { e.stopPropagation(); handleRemoveMovie(movie.id, currentSpace.id); }}
-                                                    onClick={() => onMovieSelect(movie)}
+                                                    onClick={() => onMovieSelect({ ...movie, persistenceContext: { type: 'space', spaceId: currentSpace.id } } as any)}
                                                 />
                                             </div>
                                         ))}
@@ -378,7 +399,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                                             movie={movie}
                                             actionType="remove"
                                             onAction={(e) => { e.stopPropagation(); handleRemoveMovie(movie.id); }}
-                                            onClick={() => onMovieSelect(movie)}
+                                            onClick={() => onMovieSelect({ ...movie, persistenceContext: { type: 'personal' } } as any)}
                                         />
                                     </div>
                                 ))}
@@ -387,8 +408,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout, on
                     </div>
                 )}
             </div>
-
-            {/* Movie Detail Modal - Rendered outside container to avoid clipping */}
 
         </div>
     );

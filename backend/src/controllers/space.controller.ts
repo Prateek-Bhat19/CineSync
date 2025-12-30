@@ -207,3 +207,54 @@ export const removeMovie = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ error: error.message || 'Failed to remove movie' });
   }
 };
+// Update a movie in a space
+export const updateMovieInSpace = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: 'Not authenticated' });
+      return;
+    }
+
+    const { spaceId, movieId } = req.params;
+    const updates = req.body;
+
+    const space = await Space.findById(spaceId);
+    if (!space) {
+      res.status(404).json({ error: 'Space not found' });
+      return;
+    }
+
+    // Check if user is a member
+    const userId = new mongoose.Types.ObjectId(req.user.userId);
+    if (!space.memberIds.some(id => id.toString() === userId.toString())) {
+      res.status(403).json({ error: 'You are not a member of this space' });
+      return;
+    }
+
+    const movieIndex = space.movies.findIndex(m => m.id === movieId);
+    if (movieIndex === -1) {
+      res.status(404).json({ error: 'Movie not found in space' });
+      return;
+    }
+
+    // Merge updates safely
+    const movieToUpdate = space.movies[movieIndex];
+    
+    if (updates.plot) movieToUpdate.plot = updates.plot;
+    if (updates.runtime) movieToUpdate.runtime = updates.runtime;
+    if (updates.director) movieToUpdate.director = updates.director;
+    if (updates.actors) movieToUpdate.actors = updates.actors;
+    if (updates.genre) movieToUpdate.genre = updates.genre;
+    if (updates.rating) movieToUpdate.rating = updates.rating;
+    if (updates.year) movieToUpdate.year = updates.year;
+    if (updates.posterUrl) movieToUpdate.posterUrl = updates.posterUrl;
+    if (updates.tmdbId) (movieToUpdate as any).tmdbId = updates.tmdbId;
+
+    await space.save();
+
+    res.json({ message: 'Movie updated successfully', movie: space.movies[movieIndex] });
+  } catch (error: any) {
+    console.error('Update space movie error:', error);
+    res.status(500).json({ error: error.message || 'Failed to update movie in space' });
+  }
+};

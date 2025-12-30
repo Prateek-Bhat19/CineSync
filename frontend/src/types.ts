@@ -1,9 +1,11 @@
 export interface Movie {
   id: string;
+  tmdbId?: number;
   title: string;
   year: string;
   genre: string[];
   plot: string;
+  overview?: string;
   posterUrl?: string;
   rating?: string;
   director?: string;
