@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Loader2, Film, CheckCircle2, AlertCircle, Youtube, Instagram } from 'lucide-react';
+import { Loader2, Film, CheckCircle2, AlertCircle, Youtube } from 'lucide-react';
 import { videoExtractionService, VideoExtraction } from '../services/video-extraction.service';
 import { MovieCard } from './MovieCard';
 import { Movie } from '../types';
@@ -32,7 +32,7 @@ export default function VideoExtractor({ spaces = [], onSuccess }: VideoExtracto
 
         if (!validation.valid) {
             console.error('❌ Invalid URL');
-            setError('Please enter a valid YouTube Shorts or Instagram Reel URL');
+            setError('Please enter a valid YouTube Shorts URL');
             return;
         }
 
@@ -117,8 +117,6 @@ export default function VideoExtractor({ spaces = [], onSuccess }: VideoExtracto
         const validation = videoExtractionService.isValidVideoUrl(videoUrl);
         if (validation.platform === 'youtube') {
             return <Youtube className="w-5 h-5 text-red-600" />;
-        } else if (validation.platform === 'instagram') {
-            return <Instagram className="w-5 h-5 text-pink-500" />;
         }
         return <Film className="w-5 h-5 text-gray-500" />;
     };
@@ -165,7 +163,7 @@ export default function VideoExtractor({ spaces = [], onSuccess }: VideoExtracto
                                         type="url"
                                         value={videoUrl}
                                         onChange={(e) => setVideoUrl(e.target.value)}
-                                        placeholder="Paste YouTube Shorts or Instagram Reel URL..."
+                                        placeholder="Paste YouTube Shorts URL..."
                                         className="retro-input pl-14 text-xl py-4 border-4 focus:shadow-[8px_8px_0px_0px_#d62828] transition-all bg-white"
                                         disabled={isAnalyzing}
                                     />
@@ -175,7 +173,7 @@ export default function VideoExtractor({ spaces = [], onSuccess }: VideoExtracto
                                 </div>
                                 <p className="text-base text-gray-600 mt-3 font-bold flex items-center gap-2">
                                     <CheckCircle2 className="w-4 h-4 text-green-600" />
-                                    Supports YouTube Shorts & Instagram Reels
+                                    Supports YouTube Shorts
                                 </p>
                             </div>
 
@@ -205,11 +203,7 @@ export default function VideoExtractor({ spaces = [], onSuccess }: VideoExtracto
                             {/* Video Info */}
                             <div className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                    {extraction.platform === 'youtube' ? (
-                                        <Youtube className="w-8 h-8 text-red-600" />
-                                    ) : (
-                                        <Instagram className="w-8 h-8 text-pink-600" />
-                                    )}
+                                    <Youtube className="w-8 h-8 text-red-600" />
                                     <div className="min-w-0">
                                         <h3 className="font-bold text-xl leading-tight">{extraction.videoTitle || 'Unknown Video'}</h3>
                                         <p className="text-gray-500 font-mono text-sm">{extraction.videoUrl}</p>

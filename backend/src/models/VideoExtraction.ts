@@ -18,7 +18,7 @@ export interface IAddedToList {
 export interface IVideoExtraction extends Document {
   userId: mongoose.Types.ObjectId;
   videoUrl: string;
-  platform: 'youtube' | 'instagram';
+  platform: 'youtube';
   extractedMovies: IExtractedMovie[];
   videoTitle?: string;
   videoDescription?: string;
@@ -40,7 +40,7 @@ const VideoExtractionSchema = new Schema<IVideoExtraction>({
   },
   platform: {
     type: String,
-    enum: ['youtube', 'instagram'],
+    enum: ['youtube'],
     required: true
   },
   extractedMovies: [{

@@ -9,7 +9,7 @@ interface ExtractedMovie {
 interface VideoMetadata {
   title?: string;
   description?: string;
-  platform: 'youtube' | 'instagram';
+  platform: 'youtube';
 }
 
 interface CacheEntry {
@@ -42,16 +42,11 @@ export class GeminiVideoService {
   /**
    * Parse video URL and detect platform
    */
-  parseVideoUrl(url: string): { platform: 'youtube' | 'instagram' | null; videoId: string | null } {
+  parseVideoUrl(url: string): { platform: 'youtube' | null; videoId: string | null } {
     // YouTube Shorts patterns
     const youtubePatterns = [
       /(?:youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
       /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/
-    ];
-
-    // Instagram Reels patterns
-    const instagramPatterns = [
-      /instagram\.com\/(?:reel|p)\/([a-zA-Z0-9_-]+)/
     ];
 
     // Check YouTube
@@ -62,56 +57,23 @@ export class GeminiVideoService {
       }
     }
 
-    // Check Instagram
-    for (const pattern of instagramPatterns) {
-      const match = url.match(pattern);
-      if (match) {
-        return { platform: 'instagram', videoId: match[1] };
-      }
-    }
-
     return { platform: null, videoId: null };
   }
 
   /**
    * Fetch video metadata (title, description)
-   * For Instagram, we'll use web scraping approach
    */
-  async getVideoMetadata(url: string, platform: 'youtube' | 'instagram'): Promise<VideoMetadata> {
+  async getVideoMetadata(url: string, platform: 'youtube'): Promise<VideoMetadata> {
     try {
-      if (platform === 'youtube') {
-        // For YouTube, we can extract from the page or use oEmbed
-        const response = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`);
-        if (response.ok) {
-          const data = await response.json() as { title?: string; description?: string };
-          return {
-            title: data.title,
-            description: data.description || '',
-            platform: 'youtube'
-          };
-        }
-      } else if (platform === 'instagram') {
-        // For Instagram, we'll try to fetch the page and extract metadata
-        // Note: This is a basic approach and may need adjustment based on Instagram's structure
-        const response = await fetch(url, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          }
-        });
-        
-        if (response.ok) {
-          const html = await response.text();
-          
-          // Extract title from og:title meta tag
-          const titleMatch = html.match(/<meta property="og:title" content="([^"]+)"/);
-          const descMatch = html.match(/<meta property="og:description" content="([^"]+)"/);
-          
-          return {
-            title: titleMatch ? titleMatch[1] : undefined,
-            description: descMatch ? descMatch[1] : undefined,
-            platform: 'instagram'
-          };
-        }
+      // For YouTube, we can extract from the page or use oEmbed
+      const response = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`);
+      if (response.ok) {
+        const data = await response.json() as { title?: string; description?: string };
+        return {
+          title: data.title,
+          description: data.description || '',
+          platform: 'youtube'
+        };
       }
     } catch (error) {
       console.error('Error fetching video metadata:', error);
@@ -197,7 +159,7 @@ If no movies are found, return an empty array: []
    * Analyze video content using Gemini AI with video understanding
    * This analyzes the actual video content (visual + audio), not just description
    */
-  async analyzeVideoContent(videoUrl: string, platform: 'youtube' | 'instagram'): Promise<ExtractedMovie[]> {
+  async analyzeVideoContent(videoUrl: string, platform: 'youtube'): Promise<ExtractedMovie[]> {
 
     this.ensureInitialized();
     
@@ -305,7 +267,7 @@ If no movies are found, return an empty array: []
     
     if (!platform || !videoId) {
       console.error('Invalid video URL:', videoUrl);
-      throw new Error('Invalid video URL. Please provide a valid YouTube Shorts or Instagram Reel URL.');
+      throw new Error('Invalid video URL. Please provide a valid YouTube Shorts URL.');
     }
 
 

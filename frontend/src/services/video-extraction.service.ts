@@ -56,7 +56,7 @@ export interface ExtractedMovie {
 export interface VideoExtraction {
   id: string;
   videoUrl: string;
-  platform: 'youtube' | 'instagram';
+  platform: 'youtube';
   videoTitle?: string;
   extractedMovies: ExtractedMovie[];
   extractedAt: Date;
@@ -127,27 +127,16 @@ class VideoExtractionService {
   /**
    * Validate video URL
    */
-  isValidVideoUrl(url: string): { valid: boolean; platform?: 'youtube' | 'instagram' } {
+  isValidVideoUrl(url: string): { valid: boolean; platform?: 'youtube' } {
     // YouTube patterns
     const youtubePatterns = [
       /(?:youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
       /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/
     ];
 
-    // Instagram patterns
-    const instagramPatterns = [
-      /instagram\.com\/(?:reel|p)\/([a-zA-Z0-9_-]+)/
-    ];
-
     for (const pattern of youtubePatterns) {
       if (pattern.test(url)) {
         return { valid: true, platform: 'youtube' };
-      }
-    }
-
-    for (const pattern of instagramPatterns) {
-      if (pattern.test(url)) {
-        return { valid: true, platform: 'instagram' };
       }
     }
 
